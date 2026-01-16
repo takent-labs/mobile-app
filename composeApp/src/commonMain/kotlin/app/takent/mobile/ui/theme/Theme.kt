@@ -10,6 +10,7 @@ private val TakentLightColorScheme = lightColorScheme(
     background = TakentSandLight,
     surface = TakentSandLight,
     secondary = TakentRoseSupport,
+    onSecondary = TakentWhite,
     onBackground = TakentStoneDark,
     onSurface = TakentStoneDark
 )

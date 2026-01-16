@@ -1,12 +1,14 @@
 package app.takent.mobile.ui.auth.SignUp
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AlternateEmail
@@ -58,45 +60,52 @@ fun SignUpScreen(
         ) {
             Spacer(modifier = Modifier.fillMaxHeight(0.10f))
 
-            AuthHeader(title = "Crea tu cuenta", subtitle = "Introduce tus datos para continuar")
+            AuthHeader(title = "Crea tu cuenta", subtitle = "Te llevará menos de lo que esperas")
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            OutlinedTextField(
-                value = firstName,
-                onValueChange = { firstName = it },
-                label = { Text("Nombre", style = MaterialTheme.typography.labelLarge) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp),
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    OutlinedTextField(
+                        value = firstName,
+                        onValueChange = { firstName = it },
+                        label = { Text("Nombre", style = MaterialTheme.typography.labelLarge) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(64.dp),
+                        shape = MaterialTheme.shapes.medium,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                        ),
+                        singleLine = true
+                    )
 
-                shape = MaterialTheme.shapes.medium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                    cursorColor = MaterialTheme.colorScheme.primary
-                ),
-                singleLine = true
-            )
+                    Spacer(modifier = Modifier.width(8.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
+                    OutlinedTextField(
+                        value = lastName,
+                        onValueChange = { lastName = it },
+                        label = { Text("Apellidos", style = MaterialTheme.typography.labelLarge) },
+                        modifier = Modifier
+                            .weight(1f)
+                            .height(64.dp),
+                        shape = MaterialTheme.shapes.medium,
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = MaterialTheme.colorScheme.primary,
+                            unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                        ),
+                        singleLine = true
+                    )
+                }
+            }
 
-            OutlinedTextField(
-                value = lastName,
-                onValueChange = { lastName = it },
-                label = { Text("Apellidos", style = MaterialTheme.typography.labelLarge) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp),
-
-                shape = MaterialTheme.shapes.medium,
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                    cursorColor = MaterialTheme.colorScheme.primary
-                ),
-                singleLine = true
-            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -185,7 +194,7 @@ fun SignUpScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 6.dp)
             ) {
                 Text(
-                    text = "¿Ya tienes una cuenta?",
+                    text = "¿Ya tienes una cuenta? Inicia sesión",
                     style = MaterialTheme.typography.labelLarge.copy(
                         textDecoration = TextDecoration.Underline
                     ),
