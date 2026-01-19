@@ -16,6 +16,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import app.takent.mobile.ui.auth.components.AuthHeader
+import app.takent.mobile.ui.auth.components.ProvidersIconGroup
 import app.takent.mobile.ui.components.PrimaryButton
 
 @Composable
@@ -40,7 +41,10 @@ fun SignInScreen(
 
             AuthHeader(title = "Inicia Sesión", subtitle = "Introduce tus datos para continuar")
 
-            Spacer(modifier = Modifier.height(40.dp))
+            ProvidersIconGroup(
+                onAppleClick = { /* Acción de inicio con Apple */ },
+                onGoogleClick = { /* Acción de inicio con Google */ }
+            )
 
             OutlinedTextField(
                 value = email,

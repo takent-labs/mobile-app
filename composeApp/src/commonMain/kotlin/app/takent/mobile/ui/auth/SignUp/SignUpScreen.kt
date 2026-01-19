@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AlternateEmail
+import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Icon
@@ -35,6 +36,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import app.takent.mobile.ui.auth.components.AuthHeader
+import app.takent.mobile.ui.auth.components.ProvidersIconGroup
 import app.takent.mobile.ui.components.PrimaryButton
 
 @Composable
@@ -62,50 +64,47 @@ fun SignUpScreen(
 
             AuthHeader(title = "Crea tu cuenta", subtitle = "Te llevará menos de lo que esperas")
 
-            Spacer(modifier = Modifier.height(40.dp))
+            ProvidersIconGroup(
+                onAppleClick = { /* inicio con Apple */ },
+                onGoogleClick = { /* inicio con Google */ }
+            )
 
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    OutlinedTextField(
-                        value = firstName,
-                        onValueChange = { firstName = it },
-                        label = { Text("Nombre", style = MaterialTheme.typography.labelLarge) },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(64.dp),
-                        shape = MaterialTheme.shapes.medium,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                        ),
-                        singleLine = true
-                    )
+                OutlinedTextField(
+                    value = firstName,
+                    onValueChange = { firstName = it },
+                    label = { Text("Nombre", style = MaterialTheme.typography.labelLarge) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(64.dp),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    ),
+                    singleLine = true
+                )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(8.dp))
 
-                    OutlinedTextField(
-                        value = lastName,
-                        onValueChange = { lastName = it },
-                        label = { Text("Apellidos", style = MaterialTheme.typography.labelLarge) },
-                        modifier = Modifier
-                            .weight(1f)
-                            .height(64.dp),
-                        shape = MaterialTheme.shapes.medium,
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.primary,
-                            unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
-                        ),
-                        singleLine = true
-                    )
-                }
+                OutlinedTextField(
+                    value = lastName,
+                    onValueChange = { lastName = it },
+                    label = { Text("Apellidos", style = MaterialTheme.typography.labelLarge) },
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(64.dp),
+                    shape = MaterialTheme.shapes.medium,
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    ),
+                    singleLine = true
+                )
             }
-
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -116,7 +115,13 @@ fun SignUpScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(64.dp),
-
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Rounded.Person,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                    )
+                },
                 shape = MaterialTheme.shapes.medium,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
@@ -185,7 +190,7 @@ fun SignUpScreen(
             Spacer(modifier = Modifier.height(30.dp))
 
             PrimaryButton(
-                text = "Crear Cuenta",
+                text = "Crear cuenta",
                 onClick = { /* Acción de inicio de sesión */ }
             )
 

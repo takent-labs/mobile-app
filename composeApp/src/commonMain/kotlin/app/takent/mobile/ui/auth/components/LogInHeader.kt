@@ -1,6 +1,8 @@
 package app.takent.mobile.ui.auth.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,4 +42,6 @@ fun AuthHeader(
         color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
         modifier = Modifier.padding(top = 8.dp)
     )
+
+    Spacer(modifier = Modifier.height(40.dp))
 }
