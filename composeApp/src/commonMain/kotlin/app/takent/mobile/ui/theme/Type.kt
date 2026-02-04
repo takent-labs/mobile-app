@@ -68,5 +68,5 @@ val Typography.PrimaryButton: TextStyle
     get() = TextStyle(
         fontFamily = FontFamily(Font(Res.font.GeneralSans_Medium)),
         fontWeight = FontWeight.Bold,
-        fontSize = 18.sp
+        fontSize = 20.sp
     )

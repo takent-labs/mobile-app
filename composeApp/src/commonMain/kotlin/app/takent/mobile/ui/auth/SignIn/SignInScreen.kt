@@ -21,7 +21,8 @@ import app.takent.mobile.ui.components.PrimaryButton
 
 @Composable
 fun SignInScreen(
-    onNavigateToSignUp: () -> Unit
+    onNavigateToSignUp: () -> Unit,
+    onNavigateToHome: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -117,7 +118,7 @@ fun SignInScreen(
 
             PrimaryButton(
                 text = "Iniciar Sesión",
-                onClick = { /* Acción de inicio de sesión */ }
+                onClick = { onNavigateToHome() }
             )
 
             TextButton(

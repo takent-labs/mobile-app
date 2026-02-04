@@ -8,6 +8,7 @@ import app.takent.mobile.ui.auth.SignIn.SignInScreen
 import app.takent.mobile.ui.auth.SignUp.SignUpScreen
 import app.takent.mobile.ui.auth.welcome.SplashScreen
 import app.takent.mobile.ui.auth.welcome.WelcomeScreen
+import app.takent.mobile.ui.home.HomeScreen
 
 @Composable
 fun AppNavHost(
@@ -43,6 +44,9 @@ fun AppNavHost(
             SignInScreen(
                 onNavigateToSignUp = {
                     navHostController.navigate(Screen.SignUp.route)
+                },
+                onNavigateToHome = {
+                    navHostController.navigate(Screen.Home.route)
                 }
             )
         }
@@ -52,6 +56,12 @@ fun AppNavHost(
                 onBack = {
                     navHostController.popBackStack()
                 },
+            )
+        }
+
+        composable(route = Screen.Home.route) {
+            HomeScreen(
+
             )
         }
     }
