@@ -47,6 +47,7 @@ kotlin {
             implementation("org.jetbrains.androidx.navigation:navigation-compose:2.9.1")
             implementation(libs.ktor.client.core)
             implementation(libs.kotlinx.coroutines.core)
+            implementation("io.konform:konform:0.11.0")
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
