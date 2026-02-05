@@ -4,6 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import app.takent.mobile.data.auth.AuthRepository
+import app.takent.mobile.data.auth.model.AuthResponse
 import app.takent.mobile.data.auth.model.SignInDTO
 import app.takent.mobile.data.auth.model.SignUpDTO
 import io.konform.validation.Invalid
@@ -14,10 +17,11 @@ import io.konform.validation.jsonschema.maxLength
 import io.konform.validation.jsonschema.minLength
 import io.konform.validation.jsonschema.pattern
 import io.konform.validation.messagesAtPath
+import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel(
-
-) {
+class SignUpViewModel(
+    private val repository: AuthRepository = AuthRepository()
+) : ViewModel() {
 
     var firstName by mutableStateOf("")
     var lastName by mutableStateOf("")
@@ -30,6 +34,8 @@ class SignUpViewModel : ViewModel(
     var lastNameError by mutableStateOf<String?>(null)
     var emailError by mutableStateOf<String?>(null)
     var passwordError by mutableStateOf<String?>(null)
+    var isLoading by mutableStateOf(false)
+    var errorMessage by mutableStateOf<String?>(null)
 
     private val validateSignUp = Validation<SignUpDTO> {
 
@@ -71,7 +77,22 @@ class SignUpViewModel : ViewModel(
             lastNameError = null;
             emailError = null;
             passwordError = null;
-            onSuccess()
+
+            viewModelScope.launch {
+                isLoading = true
+
+                val result: Result<AuthResponse> = repository.signUp(dto)
+
+                isLoading = false
+                errorMessage = null
+
+                result.onSuccess {
+                    onSuccess()
+                }.onFailure { error ->
+                    errorMessage = "Credenciales incorrectas o error de conexión"
+                    println("Error en la petición: ${error.message}")
+                }
+            }
         }
     }
 }

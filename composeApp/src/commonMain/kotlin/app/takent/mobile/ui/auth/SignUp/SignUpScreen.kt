@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.KeyboardType
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel,
+    onNavigateToHome: () -> Unit,
     onBack: () -> Unit
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
@@ -186,7 +187,7 @@ fun SignUpScreen(
 
             PrimaryButton(
                 text = "Crear cuenta",
-                onClick = { viewModel.onSignUpClick { /* Navegar */ } }
+                onClick = { viewModel.onSignUpClick { onNavigateToHome() } }
             )
 
             TextButton(onClick = { onBack() }) {

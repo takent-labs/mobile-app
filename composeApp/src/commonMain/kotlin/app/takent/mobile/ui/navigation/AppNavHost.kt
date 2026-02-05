@@ -57,6 +57,9 @@ fun AppNavHost(
         composable(route = Screen.SignUp.route) {
             SignUpScreen(
                 viewModel = SignUpViewModel(),
+                onNavigateToHome = {
+                    navHostController.navigate(Screen.Home.route)
+                },
                 onBack = {
                     navHostController.popBackStack()
                 },

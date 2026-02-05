@@ -3,10 +3,14 @@ package app.takent.mobile.data.auth.model
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SignUpDTO(
+data class UserPayload(
+    val id: String,
     val username: String,
     val email: String,
-    val password: String,
-    val firstName: String? = null,
-    val lastName: String? = null,
+)
+
+@Serializable
+data class AuthResponse(
+    val accessToken: String,
+    val user: UserPayload
 )

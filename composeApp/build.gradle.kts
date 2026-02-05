@@ -51,6 +51,7 @@ kotlin {
             implementation("io.konform:konform:0.11.0")
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation("com.russhwolf:multiplatform-settings-no-arg:1.1.1")
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)

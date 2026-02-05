@@ -4,6 +4,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import app.takent.mobile.data.auth.AuthRepository
+import app.takent.mobile.data.auth.model.AuthResponse
 import app.takent.mobile.data.auth.model.SignInDTO
 import io.konform.validation.Invalid
 import io.konform.validation.Validation
@@ -11,15 +14,19 @@ import io.konform.validation.jsonschema.maxLength
 import io.konform.validation.jsonschema.minLength
 import io.konform.validation.jsonschema.pattern
 import io.konform.validation.messagesAtPath
+import kotlinx.coroutines.launch
 
-class SignInViewModel : ViewModel (
-
-) {
+class SignInViewModel(
+    private val repository: AuthRepository = AuthRepository()
+) : ViewModel() {
     var email by mutableStateOf("")
     var password by mutableStateOf("")
 
     var emailError by mutableStateOf<String?>(null)
     var passwordError by mutableStateOf<String?>(null)
+
+    var isLoading by mutableStateOf(false)
+    var errorMessage by mutableStateOf<String?>(null)
 
     private val validateSignIn = Validation<SignInDTO> {
         SignInDTO::email {
@@ -43,7 +50,22 @@ class SignInViewModel : ViewModel (
         } else {
             emailError = null;
             passwordError = null;
-            onSuccess()
+
+            viewModelScope.launch {
+                isLoading = true
+
+                val result: Result<AuthResponse> = repository.signIn(dto)
+
+                isLoading = false
+                errorMessage = null
+
+                result.onSuccess {
+                    onSuccess()
+                }.onFailure { error ->
+                    errorMessage = "Credenciales incorrectas o error de conexión"
+                    println("Error en la petición: ${error.message}")
+                }
+            }
         }
     }
 }

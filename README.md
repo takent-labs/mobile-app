@@ -15,3 +15,7 @@ https://ktor.io/docs/client-create-multiplatform-application.html
 
 Serialización de datos:
 https://ktor.io/docs/client-serialization.html
+
+Multiplatform settings
+https://github.com/russhwolf/multiplatform-settings?tab=readme-ov-file#implementation-summary | 
+https://www.youtube.com/watch?v=vMNCAryfJys
