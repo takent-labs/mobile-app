@@ -1,7 +1,9 @@
 package app.takent.mobile.ui.auth.SignIn
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AlternateEmail
 import androidx.compose.material.icons.rounded.Visibility
@@ -21,12 +23,12 @@ import app.takent.mobile.ui.components.PrimaryButton
 
 @Composable
 fun SignInScreen(
+    viewModel: SignInViewModel,
     onNavigateToSignUp: () -> Unit,
     onNavigateToHome: () -> Unit
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -35,25 +37,32 @@ fun SignInScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(scrollState)
+                .imePadding()
                 .padding(horizontal = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.fillMaxHeight(0.15f))
+            Spacer(modifier = Modifier.height(60.dp))
 
             AuthHeader(title = "Inicia Sesión", subtitle = "Introduce tus datos para continuar")
 
             ProvidersIconGroup(
-                onAppleClick = { /* Acción de inicio con Apple */ },
-                onGoogleClick = { /* Acción de inicio con Google */ }
+                onAppleClick = { /* Acción */ },
+                onGoogleClick = { /* Acción */ }
             )
 
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
+                value = viewModel.email,
+                onValueChange = {
+                    viewModel.email = it
+                    viewModel.emailError = null
+                },
                 label = { Text("Email", style = MaterialTheme.typography.labelLarge) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp),
+                isError = viewModel.emailError != null,
+                supportingText = viewModel.emailError?.let {
+                    { Text(text = it, color = MaterialTheme.colorScheme.error) }
+                },
+                modifier = Modifier.fillMaxWidth(),
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.AlternateEmail,
@@ -64,26 +73,29 @@ fun SignInScreen(
                 shape = MaterialTheme.shapes.medium,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                     cursorColor = MaterialTheme.colorScheme.primary
                 ),
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = viewModel.password,
+                onValueChange = {
+                    viewModel.password = it
+                    viewModel.passwordError = null
+                },
                 label = { Text("Contraseña", style = MaterialTheme.typography.labelLarge) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp),
+                isError = viewModel.passwordError != null,
+                supportingText = viewModel.passwordError?.let {
+                    { Text(text = it, color = MaterialTheme.colorScheme.error) }
+                },
+                modifier = Modifier.fillMaxWidth(),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    IconButton(onClick = {
-                        passwordVisible = !passwordVisible
-                    }) {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             imageVector = if (passwordVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
                             contentDescription = null,
@@ -95,18 +107,18 @@ fun SignInScreen(
                 shape = MaterialTheme.shapes.medium,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                     cursorColor = MaterialTheme.colorScheme.primary
                 ),
                 singleLine = true
             )
 
             TextButton(
-                onClick = { /* Acción  de recuperar contraseña*/ },
-                modifier = Modifier.align(Alignment.End).padding(top = 4.dp)
+                onClick = { /* Acción recuperar contraseña */ },
+                modifier = Modifier.align(Alignment.End)
             ) {
                 Text(
-                    text = "¿Olvidaste tu ontraseña?",
+                    text = "¿Olvidaste tu contraseña?",
                     style = MaterialTheme.typography.labelLarge.copy(
                         textDecoration = TextDecoration.Underline
                     ),
@@ -114,16 +126,16 @@ fun SignInScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             PrimaryButton(
                 text = "Iniciar Sesión",
-                onClick = { onNavigateToHome() }
+                onClick = { viewModel.onSignInClick { onNavigateToHome() } }
             )
 
             TextButton(
                 onClick = { onNavigateToSignUp() },
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 6.dp)
+                modifier = Modifier.padding(top = 8.dp)
             ) {
                 Text(
                     text = "¿Aún no tienes una cuenta?",
@@ -133,6 +145,8 @@ fun SignInScreen(
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
                 )
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }

@@ -3,13 +3,12 @@ package app.takent.mobile.ui.auth.SignUp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AlternateEmail
 import androidx.compose.material.icons.rounded.Person
@@ -19,7 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -30,7 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
@@ -38,17 +35,19 @@ import androidx.compose.ui.unit.dp
 import app.takent.mobile.ui.auth.components.AuthHeader
 import app.takent.mobile.ui.auth.components.ProvidersIconGroup
 import app.takent.mobile.ui.components.PrimaryButton
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.ui.text.input.KeyboardType
 
 @Composable
 fun SignUpScreen(
+    viewModel: SignUpViewModel,
     onBack: () -> Unit
 ) {
-    var firstName: String by remember { mutableStateOf("") }
-    var lastName: String by remember { mutableStateOf("") }
-    var username: String by remember { mutableStateOf("") }
-    var email: String by remember { mutableStateOf("") }
-    var password: String by remember { mutableStateOf("") }
-    var passwordVisible: Boolean by remember { mutableStateOf(false) }
+    var passwordVisible by remember { mutableStateOf(false) }
+    val scrollState = rememberScrollState()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -57,33 +56,33 @@ fun SignUpScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(scrollState)
+                .imePadding()
                 .padding(horizontal = 30.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.fillMaxHeight(0.10f))
+            Spacer(modifier = Modifier.height(40.dp))
 
             AuthHeader(title = "Crea tu cuenta", subtitle = "Te llevará menos de lo que esperas")
 
             ProvidersIconGroup(
-                onAppleClick = { /* inicio con Apple */ },
-                onGoogleClick = { /* inicio con Google */ }
+                onAppleClick = { },
+                onGoogleClick = { }
             )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(modifier = Modifier.fillMaxWidth()) {
                 OutlinedTextField(
-                    value = firstName,
-                    onValueChange = { firstName = it },
-                    label = { Text("Nombre", style = MaterialTheme.typography.labelLarge) },
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(64.dp),
+                    value = viewModel.firstName,
+                    onValueChange = { viewModel.firstName = it; viewModel.firstNameError = null },
+                    isError = viewModel.firstNameError != null,
+                    supportingText = viewModel.firstNameError?.let { { Text(it) } },
+                    label = { Text("Nombre") },
+                    modifier = Modifier.weight(1f),
                     shape = MaterialTheme.shapes.medium,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                        unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                        cursorColor = MaterialTheme.colorScheme.primary
                     ),
                     singleLine = true
                 )
@@ -91,30 +90,31 @@ fun SignUpScreen(
                 Spacer(modifier = Modifier.width(8.dp))
 
                 OutlinedTextField(
-                    value = lastName,
-                    onValueChange = { lastName = it },
-                    label = { Text("Apellidos", style = MaterialTheme.typography.labelLarge) },
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(64.dp),
+                    value = viewModel.lastName,
+                    onValueChange = { viewModel.lastName = it; viewModel.lastNameError = null },
+                    isError = viewModel.lastNameError != null,
+                    supportingText = viewModel.lastNameError?.let { { Text(it) } },
+                    label = { Text("Apellidos") },
+                    modifier = Modifier.weight(1f),
                     shape = MaterialTheme.shapes.medium,
                     colors = OutlinedTextFieldDefaults.colors(
                         focusedBorderColor = MaterialTheme.colorScheme.primary,
-                        unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                        unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
+                        cursorColor = MaterialTheme.colorScheme.primary
                     ),
                     singleLine = true
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            val fieldModifier = Modifier.fillMaxWidth().padding(top = 8.dp)
 
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Usuario", style = MaterialTheme.typography.labelLarge) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp),
+                value = viewModel.username,
+                onValueChange = { viewModel.username = it; viewModel.usernameError = null },
+                isError = viewModel.usernameError != null,
+                supportingText = viewModel.usernameError?.let { { Text(it) } },
+                label = { Text("Usuario") },
+                modifier = fieldModifier,
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.Person,
@@ -125,21 +125,19 @@ fun SignUpScreen(
                 shape = MaterialTheme.shapes.medium,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                     cursorColor = MaterialTheme.colorScheme.primary
                 ),
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             OutlinedTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = { Text("Email", style = MaterialTheme.typography.labelLarge) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp),
+                value = viewModel.email,
+                onValueChange = { viewModel.email = it; viewModel.emailError = null },
+                isError = viewModel.emailError != null,
+                supportingText = viewModel.emailError?.let { { Text(it) } },
+                label = { Text("Email") },
+                modifier = fieldModifier,
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Rounded.AlternateEmail,
@@ -150,26 +148,23 @@ fun SignUpScreen(
                 shape = MaterialTheme.shapes.medium,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                     cursorColor = MaterialTheme.colorScheme.primary
                 ),
+
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
-                label = { Text("Contraseña", style = MaterialTheme.typography.labelLarge) },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(64.dp),
+                value = viewModel.password,
+                onValueChange = { viewModel.password = it; viewModel.passwordError = null },
+                isError = viewModel.passwordError != null,
+                supportingText = viewModel.passwordError?.let { { Text(it) } },
+                label = { Text("Contraseña") },
+                modifier = fieldModifier,
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 trailingIcon = {
-                    IconButton(onClick = {
-                        passwordVisible = !passwordVisible
-                    }) {
+                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
                         Icon(
                             imageVector = if (passwordVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
                             contentDescription = null,
@@ -181,31 +176,28 @@ fun SignUpScreen(
                 shape = MaterialTheme.shapes.medium,
                 colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
-                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.3f),
                     cursorColor = MaterialTheme.colorScheme.primary
                 ),
                 singleLine = true
             )
 
-            Spacer(modifier = Modifier.height(30.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             PrimaryButton(
                 text = "Crear cuenta",
-                onClick = { /* Acción de inicio de sesión */ }
+                onClick = { viewModel.onSignUpClick { /* Navegar */ } }
             )
 
-            TextButton(
-                onClick = { onBack() },
-                modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 6.dp)
-            ) {
+            TextButton(onClick = { onBack() }) {
                 Text(
                     text = "¿Ya tienes una cuenta? Inicia sesión",
-                    style = MaterialTheme.typography.labelLarge.copy(
-                        textDecoration = TextDecoration.Underline
-                    ),
+                    style = MaterialTheme.typography.labelLarge.copy(textDecoration = TextDecoration.Underline),
                     color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
                 )
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
         }
     }
 }

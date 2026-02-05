@@ -5,7 +5,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import app.takent.mobile.ui.auth.SignIn.SignInScreen
+import app.takent.mobile.ui.auth.SignIn.SignInViewModel
 import app.takent.mobile.ui.auth.SignUp.SignUpScreen
+import app.takent.mobile.ui.auth.SignUp.SignUpViewModel
 import app.takent.mobile.ui.auth.welcome.SplashScreen
 import app.takent.mobile.ui.auth.welcome.WelcomeScreen
 import app.takent.mobile.ui.home.HomeScreen
@@ -42,6 +44,7 @@ fun AppNavHost(
 
         composable(route = Screen.SignIn.route) {
             SignInScreen(
+                viewModel = SignInViewModel(),
                 onNavigateToSignUp = {
                     navHostController.navigate(Screen.SignUp.route)
                 },
@@ -53,6 +56,7 @@ fun AppNavHost(
 
         composable(route = Screen.SignUp.route) {
             SignUpScreen(
+                viewModel = SignUpViewModel(),
                 onBack = {
                     navHostController.popBackStack()
                 },
