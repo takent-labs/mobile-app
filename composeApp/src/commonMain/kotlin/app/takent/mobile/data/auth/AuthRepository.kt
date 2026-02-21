@@ -55,8 +55,6 @@ class AuthRepository {
         settings.putString("user_email", response.user.email)
     }
 
-    fun getToken(): String? = settings.getStringOrNull("token")
-
     fun logout() {
         settings.clear()
     }

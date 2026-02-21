@@ -1,6 +1,7 @@
 package app.takent.mobile.ui.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,7 +11,8 @@ import app.takent.mobile.ui.auth.SignUp.SignUpScreen
 import app.takent.mobile.ui.auth.SignUp.SignUpViewModel
 import app.takent.mobile.ui.auth.welcome.SplashScreen
 import app.takent.mobile.ui.auth.welcome.WelcomeScreen
-import app.takent.mobile.ui.home.HomeScreen
+import app.takent.mobile.ui.feed.FeedScreen
+import app.takent.mobile.ui.feed.FeedScreenViewModel
 
 @Composable
 fun AppNavHost(
@@ -49,7 +51,7 @@ fun AppNavHost(
                     navHostController.navigate(Screen.SignUp.route)
                 },
                 onNavigateToHome = {
-                    navHostController.navigate(Screen.Home.route)
+                    navHostController.navigate(Screen.Feed.route)
                 }
             )
         }
@@ -58,7 +60,7 @@ fun AppNavHost(
             SignUpScreen(
                 viewModel = SignUpViewModel(),
                 onNavigateToHome = {
-                    navHostController.navigate(Screen.Home.route)
+                    navHostController.navigate(Screen.Feed.route)
                 },
                 onBack = {
                     navHostController.popBackStack()
@@ -66,9 +68,13 @@ fun AppNavHost(
             )
         }
 
-        composable(route = Screen.Home.route) {
-            HomeScreen(
+        composable(route = Screen.Feed.route) {
+            //aseguramos que el viewmodel se crea una sola vez mientras estamos en esta ruta
+            val viewModel = remember { FeedScreenViewModel() }
 
+            FeedScreen(
+                posts = viewModel.posts,
+                viewModel = viewModel
             )
         }
     }
