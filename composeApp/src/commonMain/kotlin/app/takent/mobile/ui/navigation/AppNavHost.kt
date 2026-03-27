@@ -2,6 +2,7 @@ package app.takent.mobile.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,15 +14,21 @@ import app.takent.mobile.ui.auth.welcome.SplashScreen
 import app.takent.mobile.ui.auth.welcome.WelcomeScreen
 import app.takent.mobile.ui.feed.FeedScreen
 import app.takent.mobile.ui.feed.FeedScreenViewModel
+import app.takent.mobile.ui.profile.ProfileScreen
+import app.takent.mobile.ui.profile.ProfileScreenViewModel
 
 @Composable
 fun AppNavHost(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    modifier: Modifier = Modifier,
+    showCreateSheet: Boolean = false,
+    onDismissCreateSheet: () -> Unit = {}
 ) {
 
     NavHost(
         navController = navHostController,
         startDestination = Screen.Splash.route,
+        modifier = modifier
     ) {
         composable(route = Screen.Splash.route) {
             SplashScreen(
@@ -51,7 +58,9 @@ fun AppNavHost(
                     navHostController.navigate(Screen.SignUp.route)
                 },
                 onNavigateToHome = {
-                    navHostController.navigate(Screen.Feed.route)
+                    navHostController.navigate(Screen.Feed.route) {
+                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                    }
                 }
             )
         }
@@ -60,7 +69,9 @@ fun AppNavHost(
             SignUpScreen(
                 viewModel = SignUpViewModel(),
                 onNavigateToHome = {
-                    navHostController.navigate(Screen.Feed.route)
+                    navHostController.navigate(Screen.Feed.route) {
+                        popUpTo(Screen.Welcome.route) { inclusive = true }
+                    }
                 },
                 onBack = {
                     navHostController.popBackStack()
@@ -69,13 +80,31 @@ fun AppNavHost(
         }
 
         composable(route = Screen.Feed.route) {
-            //aseguramos que el viewmodel se crea una sola vez mientras estamos en esta ruta
             val viewModel = remember { FeedScreenViewModel() }
 
             FeedScreen(
                 posts = viewModel.posts,
-                viewModel = viewModel
+                followingPosts = viewModel.posts,
+                isCreatingPost = viewModel.isCreatingPost,
+                isLoading = viewModel.isLoading,
+                isRefreshing = viewModel.isRefreshing,
+                onRefresh = { viewModel.refresh() },
+                onCreatePost = { content, imageBytes ->
+                    viewModel.createPost(
+                        content = content,
+                        imageBytes = imageBytes,
+                        onUploadSuccess = { }
+                    )
+                },
+                onPostClick = { _ -> },
+                showCreateSheet = showCreateSheet,
+                onDismissCreateSheet = onDismissCreateSheet
             )
+        }
+
+        composable(route = Screen.Profile.route) {
+            val viewModel = remember { ProfileScreenViewModel() }
+            ProfileScreen(viewModel = viewModel)
         }
     }
 }

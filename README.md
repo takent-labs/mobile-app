@@ -16,6 +16,12 @@ https://ktor.io/docs/client-create-multiplatform-application.html
 Serialización de datos:
 https://ktor.io/docs/client-serialization.html
 
-Multiplatform settings
+Multiplatform settings:
 https://github.com/russhwolf/multiplatform-settings?tab=readme-ov-file#implementation-summary | 
 https://www.youtube.com/watch?v=vMNCAryfJys
+
+Cargar Imagenes desde internet:
+https://coil-kt.github.io/coil/
+
+Seleccionar imagenes desde galería:
+https://github.com/onseok/peekaboo

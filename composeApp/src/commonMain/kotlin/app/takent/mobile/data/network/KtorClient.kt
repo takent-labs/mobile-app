@@ -19,7 +19,6 @@ object KtorClient {
                 encodeDefaults = true
             })
         }
-
         install(HttpTimeout) {
             requestTimeoutMillis = 30000
             connectTimeoutMillis = 30000

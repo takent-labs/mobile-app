@@ -33,7 +33,6 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.kotlinx.coroutines.android)
-
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -52,6 +51,10 @@ kotlin {
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation("com.russhwolf:multiplatform-settings-no-arg:1.1.1")
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.ktor)
+            implementation(libs.peekaboo.ui)
+            implementation(libs.peekaboo.image.picker)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
